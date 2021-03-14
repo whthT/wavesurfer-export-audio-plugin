@@ -25,7 +25,7 @@ document.getElementById('some-button').onclick = async () => {
     const lowpass = wavesurfer.backend.ac.createBiquadFilter({ type: 'lowpass' })
     wavesurfer.backend.setFilter(lowpass)
 
-    const renderedBuffer = await wavesurfer.getRenderedAudioBuffer(); // Lowpass fitler applied AudioBuffer
+    const renderedBuffer = await wavesurfer.getRenderedAudioBuffer(); // Lowpass filter applied AudioBuffer
     
     wavesurfer.backend.disconnectFilters()
 }
