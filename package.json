@@ -1,0 +1,22 @@
+{
+  "name": "wavesurfer-export-audio-plugin",
+  "version": "1.0.0",
+  "description": "WaveSurfer.js export audio plugin.",
+  "main": "dist/WaveSuferExportAudioPlugin.js",
+  "repository": "git@github.com:whthT/wavesurfer-export-audio-plugin.git",
+  "author": "Musa Kurt <hackedtim61@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "html-webpack-plugin": "^4.5.0",
+    "wavesurfer.js": "^4.3.0",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0",
+    "webpack-dev-server": "^3.11.1"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-cli serve",
+    "prod": "cross-env NODE_ENV=production webpack"
+  },
+  "dependencies": {}
+}
