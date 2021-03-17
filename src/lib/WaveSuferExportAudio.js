@@ -46,13 +46,12 @@ export default class ExportAudioPlugin {
     );
 
       const connectedFilters = this.wavesurfer.getFilters();
-      if (connectedFilters.length) {
-        const biquadFilterNodes = connectedFilters.filter(filter => filter instanceof BiquadFilterNode)
+      const biquadFilterNodes = connectedFilters.filter(filter => filter instanceof BiquadFilterNode)
+      if (biquadFilterNodes.length) {
         for (const biquadFilterNode of biquadFilterNodes) {
           const filterClone = offlineContext.createBiquadFilter();
           filterClone.type = biquadFilterNode.type;
           filterClone.frequency.value = biquadFilterNode.frequency.value;
-          filterClone.Q.value = biquadFilterNode.Q.value;
           filterClone.Q.value = biquadFilterNode.Q.value;
           source.connect(filterClone);
           filterClone.connect(offlineContext.destination);
