@@ -1,6 +1,6 @@
 {
   "name": "wavesurfer-export-audio-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WaveSurfer.js export audio plugin.",
   "main": "dist/WaveSuferExportAudioPlugin.js",
   "repository": "git@github.com:whthT/wavesurfer-export-audio-plugin.git",
@@ -17,6 +17,5 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-cli serve",
     "prod": "cross-env NODE_ENV=production webpack"
-  },
-  "dependencies": {}
+  }
 }
