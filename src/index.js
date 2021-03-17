@@ -3,7 +3,6 @@ import { bufferToWave } from "./lib/helpers";
 import WaveSuferExportAudioPlugin from "./lib/WaveSuferExportAudio";
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var selectedChannels = [];
-var lowpass, highpass;
 window.addEventListener("DOMContentLoaded", () => {
   const wavesurfer = WaveSurfer.create({
     container: document.getElementById("wavesurfer"),
@@ -19,6 +18,17 @@ window.addEventListener("DOMContentLoaded", () => {
     splitChannels: true,
     height: 60,
   });
+  
+  var lowpass = wavesurfer.backend.ac.createBiquadFilter({ type: "lowpass" });
+  var highpass = wavesurfer.backend.ac.createBiquadFilter({ type: "highpass" });
+  var gain = wavesurfer.backend.ac.createGain()
+  gain.gain.setTargetAtTime(1, 0, 0.015);
+
+  wavesurfer.once('ready', () => {
+    // window.wavesurfer.backend.setFilters([lowpass, highpass])
+  })
+
+
 
   window.wavesurfer2 = wavesurfer2;
 
@@ -32,50 +42,38 @@ window.addEventListener("DOMContentLoaded", () => {
     wavesurfer2.playPause();
   };
 
-  wavesurfer.once("ready", () => {
-    setTimeout(() => {
-      lowpass = wavesurfer.backend.ac.createBiquadFilter({ type: "lowpass" });
-      lowpass.frequency.value = 300;
 
-      highpass = wavesurfer.backend.ac.createBiquadFilter({ type: "highpass" });
-      highpass.frequency.value = 300;
-    }, 300);
-  });
 
   const lowpassEl = document.getElementById("lowpass"),
-    highpassEl = document.getElementById("highpass");
+    highpassEl = document.getElementById("highpass"),
+    gainEl = document.getElementById("gain");
+
+  function setActiveFilters() {
+    window.wavesurfer.backend.setFilters([
+      lowpassEl.checked ? lowpass : null,
+      highpassEl.checked ? highpass : null,
+      gainEl.checked ? gain : null,
+    ].filter(Boolean))
+  }
+
+  async function renderWaveform2 () {
+    const renderedAudioBuffer = await wavesurfer.getRenderedAudioBuffer();
+    wavesurfer2.loadDecodedBuffer(renderedAudioBuffer);
+  }
+
   lowpassEl.addEventListener("change", (e) => {
-    if (e.target.checked) {
-      wavesurfer.backend.setFilters(
-        [lowpass, highpassEl.checked ? highpass : null].filter(Boolean)
-      );
-    } else {
-      wavesurfer.backend.disconnectFilters();
-      if (highpassEl.checked) {
-        wavesurfer.backend.setFilter(highpass);
-      }
-    }
+    setActiveFilters()
+    renderWaveform2()
+  });
+
+  gainEl.addEventListener("change", (e) => {
+    setActiveFilters()
+    renderWaveform2()
   });
 
   highpassEl.addEventListener("change", (e) => {
-    if (e.target.checked) {
-      wavesurfer.backend.setFilters(
-        [highpass, lowpassEl.checked ? lowpass : null].filter(Boolean)
-      );
-    } else {
-      wavesurfer.backend.disconnectFilters();
-      if (lowpassEl.checked) {
-        wavesurfer.backend.setFilter(lowpass);
-      }
-    }
-  });
-
-  document.getElementById("lowpass").addEventListener("change", (e) => {
-    if (e.target.checked) {
-      wavesurfer.backend.setFilter(lowpass);
-    } else {
-      wavesurfer.backend.disconnectFilters();
-    }
+    setActiveFilters()
+    renderWaveform2()
   });
 
   document.getElementById("playbackRate").addEventListener("change", (e) => {
