@@ -33,11 +33,7 @@ export default class ExportAudioPlugin {
 
       const playbackRateIncludedLength = length / playbackRate
 
-      const offlineContext = new OfflineAudioContext({
-        length: playbackRateIncludedLength,
-        numberOfChannels,
-        sampleRate
-      });
+      const offlineContext = new OfflineAudioContext(numberOfChannels, playbackRateIncludedLength, sampleRate);
       var source = offlineContext.createBufferSource();
       source.buffer = this.wavesurfer.backend.buffer;
       source.playbackRate.value = playbackRate
