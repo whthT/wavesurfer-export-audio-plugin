@@ -1,6 +1,6 @@
 {
   "name": "wavesurfer-export-audio-plugin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "WaveSurfer.js export audio plugin.",
   "main": "dist/WaveSuferExportAudioPlugin.js",
   "repository": "git@github.com:whthT/wavesurfer-export-audio-plugin.git",
