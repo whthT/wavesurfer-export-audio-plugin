@@ -76,7 +76,7 @@ window.addEventListener("DOMContentLoaded", () => {
     renderWaveform2()
   });
 
-  document.getElementById("playbackRate").addEventListener("change", (e) => {
+  document.getElementById("playbackRate").addEventListener("input", (e) => {
     wavesurfer.setPlaybackRate(parseFloat(e.target.value));
   });
 

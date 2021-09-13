@@ -23,27 +23,24 @@ export default class ExportAudioPlugin {
 
   getRenderedAudioBuffer() {
     return new Promise((resolve, reject) => {
+      const playbackRate = this.wavesurfer.getPlaybackRate();
+
       var {
         length,
         numberOfChannels,
         sampleRate,
       } = this.wavesurfer.backend.buffer;
 
+      const playbackRateIncludedLength = length / playbackRate
 
-      const playbackRate = this.wavesurfer.backend.source.playbackRate.value;
-
-      const offlineContext = new OfflineAudioContext(
+      const offlineContext = new OfflineAudioContext({
+        length: playbackRateIncludedLength,
         numberOfChannels,
-        length,
         sampleRate
-      );
+      });
       var source = offlineContext.createBufferSource();
       source.buffer = this.wavesurfer.backend.buffer;
-      
-      source.playbackRate.setValueAtTime(
-        playbackRate,
-        offlineContext.currentTime
-    );
+      source.playbackRate.value = playbackRate
 
       const connectedFilters = this.wavesurfer.getFilters();
       const biquadFilterNodes = connectedFilters.filter(filter => filter instanceof BiquadFilterNode)
@@ -59,8 +56,6 @@ export default class ExportAudioPlugin {
       } else {
         source.connect(offlineContext.destination)
       }
-
-      // source.playbackRate.value = this.wavesurfer.backend.source.playbackRate.value
 
       source.start()
 
